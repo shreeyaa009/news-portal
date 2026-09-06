@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: postgres18_db
+
+    environment:
+      POSTGRES_USER: shreeya
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: news_portal
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+    ports:
+      - "15432:5432"
+
+    volumes:
+      - pg18_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg18_data:
