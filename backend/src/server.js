@@ -3,11 +3,24 @@ const cors = require("cors");
 require("dotenv").config({ quiet: true });
 
 const pool = require("./config/database");
+const articleRoutes = require("./routes/articleRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
+const authRoutes = require("./routes/authRoutes");
+const protect = require("./middleware/authMiddleware");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use("/api/articles", articleRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/auth", authRoutes);
+app.get("/api/auth/me", protect, (req, res) => {
+  res.json({
+    message: "You are authenticated",
+    user: req.user,
+  });
+});
 
 app.get("/", (req, res) => {
   res.json({
